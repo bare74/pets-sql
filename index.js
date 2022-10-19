@@ -25,12 +25,12 @@ const DROP_PETNAME = "DROP TABLE if exists petname;";
 
 app.get("/create_table", (req, res) => {
   db.run(CREATE_PETNAME);
-  res.send("Table created");
+  res.send('Table created <button><a href="/">back</a></button>');
 });
 
 app.get("/drop", (req, res) => {
   db.run(DROP_PETNAME);
-  res.send("Table dropped");
+  res.send('Table dropped <button><a href="/">back</a></button>');
 });
 
 app.get("/reset", (req, res) => {
@@ -51,7 +51,9 @@ app.get("/reset", (req, res) => {
     });
   });
 
-  res.send("Table reset (dropped and re-created)");
+  res.send(
+    'Table reset (dropped and re-created) <button><a href="/">back</a></button>'
+  );
 });
 
 app.get("/read", (req, res) => {
@@ -106,7 +108,9 @@ app.post("/create", (req, res) => {
       active +
       "');"
   );
-  res.send("Kjæledyret ditt er registrert");
+  res.send(
+    'Kjæledyret ditt er registrert<button><a href="/">back</a></button>'
+  );
 });
 
 app.get("/update", (req, res) => {
@@ -124,7 +128,7 @@ app.post("/update", (req, res) => {
   db.run(sql, [petname, petID], function (err) {
     if (err) return console.log(err.message);
   });
-  res.send("Ditt kjæledyr er oppdatert");
+  res.send('Ditt kjæledyr er oppdatert<button><a href="/">back</a></button>');
 });
 
 app.get("/delete", (req, res) => {
@@ -139,7 +143,7 @@ app.post("/delete", (req, res) => {
   const sql = `UPDATE petname SET active='false' WHERE petID = ${petID}`;
   db.run(sql);
 
-  res.send("Ditt kjæledyr er slettet");
+  res.send('Ditt kjæledyr er slettet<button><a href="/">back</a></button>');
 });
 
 app.listen(port, () => console.log("Server is running on port:", port));
