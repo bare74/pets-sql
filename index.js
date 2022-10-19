@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 });
 
 const CREATE_PETNAME =
-  "CREATE TABLE if not exists petname (petID INTEGER PRIMARY KEY AUTOINCREMENT, petname TEXT, age TEXT, owner_name TEXT, species TEXT);";
+  "CREATE TABLE if not exists petname (petID INTEGER PRIMARY KEY AUTOINCREMENT, petname TEXT, age TEXT, owner_name TEXT, species TEXT, active TEXT);";
 const DROP_PETNAME = "DROP TABLE if exists petname;";
 
 app.get("/create_table", (req, res) => {
@@ -40,13 +40,13 @@ app.get("/reset", (req, res) => {
       console.log("...  and re-created");
 
       db.run(
-        "INSERT INTO petname (petname, age, owner_name, species) VALUES ('Buddy',  '2', 'Paul Hansson', 'dog');"
+        "INSERT INTO petname (petname, age, owner_name, species, active) VALUES ('Buddy',  '2', 'Paul Hansson', 'dog', 'true');"
       );
       db.run(
-        "INSERT INTO petname (petname, age, owner_name, species) VALUES ('Milo',  '8', 'Jason Smith', 'cat');"
+        "INSERT INTO petname (petname, age, owner_name, species, active) VALUES ('Milo',  '8', 'Jason Smith', 'cat', 'true');"
       );
       db.run(
-        "INSERT INTO petname (petname, age, owner_name, species) VALUES ('Max',  '4', 'Mel Raven', 'bird');"
+        "INSERT INTO petname (petname, age, owner_name, species, active) VALUES ('Max',  '4', 'Mel Raven', 'bird', 'true');"
       );
     });
   });
@@ -58,9 +58,10 @@ app.get("/read", (req, res) => {
   let data = [];
   db.serialize(() => {
     db.each(
-      "SELECT * FROM petname;",
+      "SELECT * FROM petname WHERE active='true';",
       (err, row) => {
         data.push(row);
+        if (err) return console.log(err.message);
       },
       () => {
         res.send(data);
@@ -76,6 +77,7 @@ app.get("/read/:petID", (req, res) => {
       `SELECT * FROM petname WHERE petID = ${req.params.petID}`,
       (err, row) => {
         data.push(row);
+        if (err) return console.log(err.message);
       },
       () => {
         res.send(data);
@@ -89,9 +91,10 @@ app.post("/create", (req, res) => {
   let age = req.body.age;
   let owner_name = req.body.owner_name;
   let species = req.body.species;
+  let active = "true";
 
   db.run(
-    "INSERT INTO petname (petname, age, owner_name, species) VALUES ('" +
+    "INSERT INTO petname (petname, age, owner_name, species, active) VALUES ('" +
       petname +
       "',  '" +
       age +
@@ -99,6 +102,8 @@ app.post("/create", (req, res) => {
       owner_name +
       "',  '" +
       species +
+      "',  '" +
+      active +
       "');"
   );
   res.send("Kjæledyret ditt er registrert");
@@ -113,8 +118,6 @@ app.get("/update", (req, res) => {
 app.post("/update", (req, res) => {
   let petID = req.body.petID;
   let petname = req.body.petname;
-
-  console.log(petID);
 
   const sql = `UPDATE petname SET petname = ? WHERE petID =? `;
 
@@ -133,8 +136,8 @@ app.get("/delete", (req, res) => {
 app.post("/delete", (req, res) => {
   let petID = req.body.petID;
 
-  const sql = `DELETE FROM petname WHERE petID = ?`;
-  db.run(sql, [petID]);
+  const sql = `UPDATE petname SET active='false' WHERE petID = ${petID}`;
+  db.run(sql);
 
   res.send("Ditt kjæledyr er slettet");
 });
