@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Website</title>
+</head>
+<style>
+    .navigation li a {
+        text-decoration: none;
+    }
+
+    .navigation ul {
+        margin-top: 15px;
+    }
+
+    .navigation li {
+        padding-left: 20px;
+        display: inline-block;
+    }
+
+    .navigation,
+    form {
+        display: grid;
+        place-items: center;
+
+    }
+</style>
+<div class="navigation">
+    <ul>
+        <li>
+            <a href="./." class="link_header">
+                <h3>Forside</h3>
+            </a>
+        </li>
+        <li>
+            <a href="./read" class="link_header">
+                <h3>API</h3>
+            </a>
+        </li>
+        <li>
+            <a href="./update" class="link_header">
+                <h3>Update</h3>
+            </a>
+        </li>
+        <li>
+            <a href="./delete" class="link_header">
+                <h3>Delete</h3>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<body>
+    <form action="/create" method="POST">
+        <h2>Legg til ditt kjæledyr</h2>
+        <div class="input">
+            <input type="text" name="petname" placeholder="Dyrenavn">
+        </div>
+        <div class="input">
+            <input type="text" name="age" placeholder="Alder">
+        </div>
+        <div class="input">
+            <input type="text" name="owner_name" placeholder="Eier">
+        </div>
+        <div class="input">
+            <input type="text" name="species" placeholder="Rase">
+        </div>
+        <input type="submit" value="Register">
+    </form>
+</body>
+
+</html>
