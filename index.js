@@ -146,4 +146,15 @@ app.post("/delete", (req, res) => {
   res.send('Ditt kjæledyr er slettet<button><a href="/">back</a></button>');
 });
 
+app.post("/undo_delete", (req, res) => {
+  let petID = req.body.petID;
+
+  const sql = `UPDATE petname SET active='true' WHERE petID = ${petID}`;
+  db.run(sql);
+
+  res.send(
+    'Ditt kjæledyr er gjennopprettet<button><a href="/">back</a></button>'
+  );
+});
+
 app.listen(port, () => console.log("Server is running on port:", port));
